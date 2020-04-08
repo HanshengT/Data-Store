@@ -1,0 +1,181 @@
+swagger: '2.0'
+info:
+  description: This is an API for renting sharing power banks
+  version: 1.0.0
+  title: Renting power bank API
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+paths:
+  /report/renting_request:
+
+    get:
+      summary: gets renting request
+      operationId: app.get_renting_request
+      description: Stores a renting request
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: startDate
+        description: pass an optional search start date for looking up the event
+        required: false
+        type: string
+        format: date-time
+      - in: query
+        name: endDate
+        description: pass an optional search end date for looking up the event
+        required: false
+        type: string
+        format: date-time
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/RentingRequest'
+        400:
+          description: bad input parameter
+
+  /report/charging_box_status:
+
+    get:
+      summary: gets charging box status
+      operationId: app.get_charging_box_status
+      description: Stores a charging box status
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: startDate
+        description: pass an optional search start date for looking up the event
+        required: false
+        type: string
+        format: date-time
+      - in: query
+        name: endDate
+        description: pass an optional search end date for looking up the event
+        required: false
+        type: string
+        format: date-time
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ChargingBoxStatus'
+        400:
+          description: bad input parameter
+
+definitions:
+  RentingRequest:
+    type: object
+    required:
+    - user_id
+    - user_device_id
+    - charging_box_id
+    - timestamp
+    properties:
+      user_id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      user_device_id:
+        type: integer
+        example: 345480745
+      charging_box_id:
+        type: string
+        example: A-000001
+      timestamp:
+        type: string
+        format: date-time
+        example: 2016-08-29T09:12:33.001Z
+
+  RequestStats:
+    type: object
+    required:
+    - num_renting_request
+    - average_renting_request
+    - high_renting_request
+    - low_renting_request
+    - updated_timestamp
+    properties:
+      num_renting_request:
+        type: integer
+        example: 1000
+      average_renting_request:
+        type: integer
+        example: 900
+      high_renting_request:
+        type: integer
+        example: 1800
+      low_renting_request:
+        type: integer
+        example: 200
+      updated_timestamp:
+        type: string
+        format: date-time
+        example: 2016-08-29T09:12:33.001z
+
+  ChargingBoxStatus:
+    type: object
+    required:
+    - charging_box_id
+    - power_banks_remain
+    - power_bank_status
+    - timestamp
+    properties:
+      charging_box_id:
+        type: string
+        example: A-000001
+      power_banks_remain:
+        type: integer
+        example: 6
+      power_bank_status:
+        $ref: '#/definitions/PowerBankStatus'
+      timestamp:
+        type: string
+        format: date-time
+        example: 2016-08-29T09:12:33.001Z
+
+  PowerBankStatus:
+    required:
+    - power_bank_id
+    - battery_level
+    properties:
+      power_bank_id:
+        type: string
+        example: a-000a0f
+      battery_level:
+        type: integer
+        example: 80
+
+  ChargingBoxStatusStats:
+    type: object
+    required:
+    - num_status_report
+    - average_status_report
+    - high_status_report
+    - low_status_report
+    - updated_timestamp
+    properties:
+      num_renting_request:
+        type: integer
+        example: 1000
+      average_renting_request:
+        type: integer
+        example: 900
+      high_renting_request:
+        type: integer
+        example: 1800
+      low_renting_request:
+        type: integer
+        example: 200
+      updated_timestamp:
+        type: string
+        format: date-time
+        example: 2016-08-29T09:12:33.001z
